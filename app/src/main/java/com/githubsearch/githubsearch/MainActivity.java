@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 10;
     private EditText githubUsername;
     private FloatingActionButton searchBtn;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         githubUsername = (EditText) findViewById(R.id.editTextGithubUsernameSearch);
         searchBtn = (FloatingActionButton) findViewById(R.id.floatingActionButtonSearch);
+        progressBar = (ProgressBar) findViewById(R.id.progressBarCircle);
 
+        progressBar.setVisibility(View.INVISIBLE);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private class RetrieveUserInfo extends AsyncTask<String, Void, String> {
@@ -61,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
 //            githubUsername.setText("");
             // Show loader spinning or something
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         protected String doInBackground(String... args) {
@@ -91,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String response) {
+
+            progressBar.setVisibility(View.INVISIBLE);
+
             if(response == null) {
 //                response = "THERE WAS AN ERROR";
 

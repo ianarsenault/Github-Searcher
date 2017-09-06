@@ -82,4 +82,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
 
+    <ProgressBar
+        android:id="@+id/progressBarCircle"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="239dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="53dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/progressColor"
+        android:indeterminateTintMode="src_in"
+        app:layout_constraintHorizontal_bias="0.238"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
