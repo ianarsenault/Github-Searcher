@@ -8,4 +8,11 @@
     tools:context="com.githubsearch.githubsearch.Profile"
     tools:showIn="@layout/activity_profile">
 
+    <TextView
+        android:id="@+id/tvJSONResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="41dp" />
 </android.support.constraint.ConstraintLayout>
