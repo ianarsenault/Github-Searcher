@@ -6,16 +6,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Profile extends AppCompatActivity {
 
-    private TextView jsonDisplay;
+    private TextView varDumpDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +27,26 @@ public class Profile extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.github_icon);
         setSupportActionBar(toolbar);
 
-        jsonDisplay = (TextView) findViewById(R.id.tvJSONResult);
+        varDumpDisplay = (TextView) findViewById(R.id.tvJSONResult);
 
         Intent i = getIntent();
-        String getData = i.getStringExtra("profilekey");
+        String jsonString = i.getStringExtra("profilekey");
 
-        jsonDisplay.setText(getData);
+        // Ordered JSON from Github
+//        varDumpDisplay.setText(jsonString);
+
+
+        try {
+            JSONObject jObj = new JSONObject(jsonString);
+            Log.d("My App",jObj.toString());
+            // Display unordered JSON
+            varDumpDisplay.setText(jObj.toString().replace("\\",""));
+
+        } catch (JSONException e) {
+            Log.e("MYAPP", "unexpected JSON Exception", e);
+        }
+
+
 
     }
 
