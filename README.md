@@ -1,6 +1,6 @@
 # Github-Searcher
 
-An Android web app that allows users to search Github users, retrieve profile information including stars, repositories, number of followers, and most recent commit. :shipit:
+An Android web app that allows anyone to search Github users, retrieve profile information including stars, repositories, number of followers, and most recent commit. :shipit:
 
 # Work-in-Progress
 - Parse JSON profile data
