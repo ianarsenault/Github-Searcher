@@ -3,10 +3,10 @@
  *
  *
  *  Get repos list
- *  "https://api.github.com/users/username/repos"
+ *  "https://api.github.com/users/gorgonsmaze/repos"
  *
  * Get starred list
- * "https://api.github.com/users/username/starred
+ * "https://api.github.com/users/gorgonsmaze/starred"
  *
  */
 
@@ -68,6 +68,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -138,7 +139,7 @@ public class Profile extends AppCompatActivity {
             JSONObject jObj = new JSONObject(jsonString);
             int size = jObj.length();
             // Log GET
-            Log.d("My App: ",jObj.toString());
+            Log.d("My App: ", jObj.toString());
 
             profileUrl = jObj.getString(KEY_HTML_URL);
             avatarUrl = jObj.getString(KEY_AVATAR);

@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(view, "You must enter a Github Username!", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                 } else {
-                    new RetrieveUserInfo().execute(profileUrl);
+                    new RetrieveUserInfo().execute(profileUrl, repoUrl, starUrl);
                 }
             }
         });
@@ -62,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private class RetrieveUserInfo extends AsyncTask<String, Void, String> {
+    private class RetrieveUserInfo extends AsyncTask<String, Void, JSONObject[]> {
 
         private Exception exception;
 
@@ -73,35 +74,28 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
         }
 
-        protected String doInBackground(String... args) {
-            String urlProfile = args[0];
-            // Do some validation here
+        protected JSONObject[] doInBackground(String... urls) {
+            JSONParser jsonParser = new JSONParser();
+            String urlProfile = urls[0];
+            String urlRepos = urls[1];
+            String urlStars = urls[2];
 
-            try {
-                URL url = new URL(urlProfile);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    bufferedReader.close();
-                    return stringBuilder.toString();
-                }
-                finally{
-                    urlConnection.disconnect();
-                }
-            }
-            catch(Exception e) {
-                Log.e("ERROR", e.getMessage(), e);
-                return null;
-            }
+            JSONObject[] jsons = new JSONObject[3];
+            jsons[0] = jsonParser.getJSONFromUrl(urlProfile);
+            jsons[1] = jsonParser.getJSONFromUrl(urlRepos);
+            jsons[2] = jsonParser.getJSONFromUrl(urlStars);
+
+            return jsons;
+
         }
 
-        protected void onPostExecute(String response) {
+        protected void onPostExecute(JSONObject[] jsons) {
+            String response = jsons.toString();
+            JSONObject githubProfile = jsons[0];
+            JSONObject githubRepos = jsons[1];
+            JSONObject githubStars = jsons[2];
 
+            // Set progress bar invisible
             progressBar.setVisibility(View.INVISIBLE);
 
             if(response == null) {
@@ -114,18 +108,87 @@ public class MainActivity extends AppCompatActivity {
                 return;
 
             } else {
-                //            progressBar.setVisibility(View.GONE);
                 Log.i("INFO", response);
+                Log.i("PROFILE RESPONSE " , githubProfile.toString());
+                Log.i("REPOS RESPONSE " , githubRepos.toString());
+                Log.i("STARS RESPONSE" , githubStars.toString());
 
                 // Create intent to pass json object to Profile page
                 Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.Profile.class);
-                i.putExtra("profilekey", response.toString());
+                i.putExtra("profilekey", githubProfile.toString());
                 startActivityForResult(i, REQUEST_CODE);
             }
 
 
         }
     }
+
+
+//
+//    private class RetrieveUserInfo extends AsyncTask<String, Void, String> {
+//
+//        private Exception exception;
+//
+//        protected void onPreExecute() {
+////            githubUsername.setText("");
+//            // Show loader spinning or something
+//            progressBar.setVisibility(View.VISIBLE);
+//        }
+//
+//        protected String doInBackground(String... args) {
+//            String urlProfile = args[0];
+//
+//            // Do some validation here
+//
+//            try {
+//                URL url = new URL(urlProfile);
+//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//                try {
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    String line;
+//                    while ((line = bufferedReader.readLine()) != null) {
+//                        stringBuilder.append(line).append("\n");
+//                    }
+//                    bufferedReader.close();
+//                    return stringBuilder.toString();
+//                }
+//                finally{
+//                    urlConnection.disconnect();
+//                }
+//            }
+//            catch(Exception e) {
+//                Log.e("ERROR", e.getMessage(), e);
+//                return null;
+//            }
+//        }
+//
+//        protected void onPostExecute(String response) {
+//
+//            progressBar.setVisibility(View.INVISIBLE);
+//
+//            if(response == null) {
+////                response = "THERE WAS AN ERROR";
+//
+////                Toast.makeText(getApplicationContext(),"That user name does not exist", Toast.LENGTH_LONG).show();
+//
+//                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "That user name does not exist", Snackbar.LENGTH_SHORT)
+//                        .setAction("Action", null).show();
+//                return;
+//
+//            } else {
+//                //            progressBar.setVisibility(View.GONE);
+//                Log.i("INFO", response);
+//
+//                // Create intent to pass json object to Profile page
+//                Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.Profile.class);
+//                i.putExtra("profilekey", response.toString());
+//                startActivityForResult(i, REQUEST_CODE);
+//            }
+//
+//
+//        }
+//    }
 
 
     @Override
