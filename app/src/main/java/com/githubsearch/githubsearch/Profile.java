@@ -48,6 +48,7 @@ package com.githubsearch.githubsearch;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -57,10 +58,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -71,6 +75,7 @@ import org.w3c.dom.Text;
 import static android.R.attr.drawable;
 import static android.R.attr.height;
 import static android.R.attr.width;
+import static android.os.Build.VERSION_CODES.O;
 
 public class Profile extends AppCompatActivity {
 
@@ -87,7 +92,7 @@ public class Profile extends AppCompatActivity {
     private static final String KEY_AVATAR = "avatar_url";
     private static final String KEY_LOGIN = "login";
     private static final String KEY_LOCATION = "location";
-    private static final String KEY_BLOG = "blog";
+    private static final String KEY_EMAIL = "email";
     private static final String KEY_NAME = "name";
     private static final String KEY_FOLLOWING = "following";
     private static final String KEY_FOLLOWERS = "followers";
@@ -105,6 +110,7 @@ public class Profile extends AppCompatActivity {
     private String lction;
     private int gFollowers;
     private int gFollowing;
+    private String gEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +123,7 @@ public class Profile extends AppCompatActivity {
 
         // set variables by IDs
         profilePicture = (ImageView) findViewById(R.id.imageViewProfilePicture);
-        varDumpDisplay = (TextView) findViewById(R.id.tvJSONResult);
+//        varDumpDisplay = (TextView) findViewById(R.id.tvJSONResult);
 
         username = (TextView) findViewById(R.id.textViewUsername);
         name = (TextView) findViewById(R.id.textViewName);
@@ -141,6 +147,7 @@ public class Profile extends AppCompatActivity {
             lction = jObj.getString(KEY_LOCATION);
             gFollowers = jObj.getInt(KEY_FOLLOWERS);
             gFollowing = jObj.getInt(KEY_FOLLOWING);
+            gEmail = jObj.getString(KEY_EMAIL);
 
 
 
@@ -187,6 +194,36 @@ public class Profile extends AppCompatActivity {
                     intent.setPackage(null);
                     startActivity(intent);
                 }
+            }
+        });
+
+
+
+        ((ImageButton)findViewById(R.id.imageButtonEmail)).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+//                        Toast toast = Toast.makeText(getApplicationContext(), "EMAIL BUTTON PRESSED" , Toast.LENGTH_SHORT);
+//                        toast.show();
+//                        ImageButton imgView = (ImageButton ) view;
+//                        imgView.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+//                        view.invalidate();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        Toast emailToast = Toast.makeText(getApplicationContext(), gEmail , Toast.LENGTH_SHORT);
+                        emailToast.show();
+                       break;
+
+                    case MotionEvent.ACTION_CANCEL:
+                        ImageButton imgView = (ImageButton) view;
+                        imgView.getBackground().clearColorFilter();
+                        imgView.invalidate();
+                        break;
+
+                }
+                return false;
             }
         });
 
