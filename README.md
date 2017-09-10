@@ -6,7 +6,8 @@ An Android web app that allows anyone to search Github users, retrieve profile i
  - [ ] Parse JSON profile data
  - [x] Display Github Profile picture in ImageView
  - [x] Create profile elements in android
- - [ ]  Allow user to click repository/stars => Display list of repos/stars => clickable 2 browser
+ - [ ] Allow user to click repository/stars => Display list of repos/stars => clickable 2 browser
+ - [ ] User Fragments for repository/star lists views
 
 ![Image](https://i.imgur.com/GaevEiP.png)
 
