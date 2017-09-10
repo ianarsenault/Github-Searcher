@@ -24,7 +24,6 @@ import java.net.URL;
 import static com.githubsearch.githubsearch.R.id.layoutxx;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int REQUEST_CODE = 10;
     private EditText githubUsername;
     private FloatingActionButton searchBtn;
@@ -48,16 +47,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String username = githubUsername.getText().toString();
+                String profileUrl = "https://api.github.com/users/" + username;
+                String repoUrl = "https://api.github.com/users/" + username + "/repos";
+                String starUrl = "https://api.github.com/users/" + username + "/starred";
                 if (username.isEmpty()) {
                     Snackbar.make(view, "You must enter a Github Username!", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                 } else {
-                    new RetrieveUserInfo().execute(username);
+                    new RetrieveUserInfo().execute(profileUrl);
                 }
             }
         });
 
     }
+
+
 
     private class RetrieveUserInfo extends AsyncTask<String, Void, String> {
 
@@ -70,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected String doInBackground(String... args) {
-            String user = args[0];
+            String urlProfile = args[0];
             // Do some validation here
 
             try {
-                URL url = new URL("https://api.github.com/users/" + user);
+                URL url = new URL(urlProfile);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
