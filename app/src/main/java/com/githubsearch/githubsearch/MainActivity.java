@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static android.R.attr.type;
 import static com.githubsearch.githubsearch.R.id.layoutxx;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,6 +91,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(JSONObject[] jsons) {
+            if (jsons[0] == null) {
+                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "That user name does not exist", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+                // Set progress bar invisible
+                progressBar.setVisibility(View.INVISIBLE);
+                return;
+            }
             String response = jsons.toString();
             JSONObject githubProfile = jsons[0];
             JSONObject githubRepos = jsons[1];
@@ -98,16 +106,14 @@ public class MainActivity extends AppCompatActivity {
             // Set progress bar invisible
             progressBar.setVisibility(View.INVISIBLE);
 
-            if(response == null) {
-//                response = "THERE WAS AN ERROR";
 
-//                Toast.makeText(getApplicationContext(),"That user name does not exist", Toast.LENGTH_LONG).show();
-
+            if(response == "") {
                 Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "That user name does not exist", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
                 return;
 
-            } else {
+            }
+            else {
                 Log.i("INFO", response);
                 Log.i("PROFILE RESPONSE " , githubProfile.toString());
                 Log.i("REPOS RESPONSE " , githubRepos.toString());
@@ -124,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//
+
 //    private class RetrieveUserInfo extends AsyncTask<String, Void, String> {
 //
 //        private Exception exception;
