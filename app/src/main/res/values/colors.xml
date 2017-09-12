@@ -5,4 +5,7 @@
     <color name="colorAccent">#ff4081</color>
     <!-- tried using for progress bar - no luck -->
     <color name="progressColor">#dee0de</color>
+    <color name="blankUsernameColor">#e23235</color>
+    <color name="coolGreen">#32e247</color>
+    <color name="coolPurple">#7b32e2</color>
 </resources>

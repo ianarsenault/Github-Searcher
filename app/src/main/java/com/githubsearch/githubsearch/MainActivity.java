@@ -2,12 +2,15 @@ package com.githubsearch.githubsearch;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,7 +28,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static android.R.attr.type;
+import static android.support.design.widget.Snackbar.make;
 import static com.githubsearch.githubsearch.R.id.layoutxx;
+import static com.githubsearch.githubsearch.R.id.snackbar_action;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 10;
@@ -54,8 +60,15 @@ public class MainActivity extends AppCompatActivity {
                 String repoUrl = "https://api.github.com/users/" + username + "/repos";
                 String starUrl = "https://api.github.com/users/" + username + "/starred";
                 if (username.isEmpty()) {
-                    Snackbar.make(view, "You must enter a Github Username!", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
+
+                    Snackbar snackbar = Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "You must enter a Github Username!", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    snackbar.show();
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blankUsernameColor));
+                    TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
                 } else {
                     new RetrieveUserInfo().execute(profileUrl, repoUrl, starUrl);
                 }
@@ -91,10 +104,19 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(JSONObject[] jsons) {
             if (jsons[0] == null) {
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "That user name does not exist", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+
+                Snackbar snackbar = Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "That user name does not exist!", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null);
+                snackbar.show();
+                View snackbarView = snackbar.getView();
+                snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+
                 // Set progress bar invisible
                 progressBar.setVisibility(View.INVISIBLE);
+
                 return;
             }
             String response = jsons.toString();

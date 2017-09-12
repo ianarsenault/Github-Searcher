@@ -48,15 +48,18 @@ package com.githubsearch.githubsearch;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -198,8 +201,31 @@ public class Profile extends AppCompatActivity {
         btnRepos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                 /** TOAST CENTERED ON TOP EXAMPLE **/
+//                Toast toast=Toast.makeText(getApplicationContext(),"This is advanced toast",Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.TOP | Gravity.CENTER,0,171);
+//                View v=toast.getView();
+//                TextView  view1=(TextView)v.findViewById(android.R.id.message);
+//                v.setBackgroundResource(R.color.blankUsernameColor);
+//                toast.show();
+
+
+                if (gNumberOfRepos == 0) {
+                    Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no repos!", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    snackbar.show();
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blankUsernameColor));
+                    TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+
                 Toast toast = Toast.makeText(getApplicationContext(), repoJsonString, Toast.LENGTH_SHORT);
                 toast.show();
+
+
+                // ELSE OPEN FRAGMENT/ACTIVITY DISPLAY REPOS
             }
         });
 
