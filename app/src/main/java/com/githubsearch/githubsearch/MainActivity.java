@@ -70,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         private Exception exception;
 
         protected void onPreExecute() {
-//            githubUsername.setText("");
-            // Show loader spinning or something
+            // Show progress bar
             progressBar.setVisibility(View.VISIBLE);
         }
 
@@ -107,24 +106,17 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
 
 
-            if(response == "") {
-                Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "That user name does not exist", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-                return;
+            Log.i("INFO", response);
+            Log.i("PROFILE RESPONSE " , githubProfile.toString());
+            Log.i("REPOS RESPONSE " , githubRepos.toString());
+            Log.i("STARS RESPONSE" , githubStars.toString());
 
-            }
-            else {
-                Log.i("INFO", response);
-                Log.i("PROFILE RESPONSE " , githubProfile.toString());
-                Log.i("REPOS RESPONSE " , githubRepos.toString());
-                Log.i("STARS RESPONSE" , githubStars.toString());
-
-                // Create intent to pass json object to Profile page
-                Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.Profile.class);
-                i.putExtra("profilekey", githubProfile.toString());
-                startActivityForResult(i, REQUEST_CODE);
-            }
-
+            // Create intent to pass json object to Profile page
+            Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.Profile.class);
+            i.putExtra("profilekey", githubProfile.toString());
+            i.putExtra("repokey", githubRepos.toString());
+            i.putExtra("starskey", githubStars.toString());
+            startActivityForResult(i, REQUEST_CODE);
 
         }
     }

@@ -54,12 +54,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -87,6 +89,8 @@ public class Profile extends AppCompatActivity {
     private TextView location;
     private TextView following;
     private TextView followers;
+    private Button btnRepos;
+    private Button btnStars;
 
     private FloatingActionButton chromeBtn;
 
@@ -112,6 +116,7 @@ public class Profile extends AppCompatActivity {
     private int gFollowers;
     private int gFollowing;
     private String gEmail;
+    private int gNumberOfRepos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,35 +129,36 @@ public class Profile extends AppCompatActivity {
 
         // set variables by IDs
         profilePicture = (ImageView) findViewById(R.id.imageViewProfilePicture);
-//        varDumpDisplay = (TextView) findViewById(R.id.tvJSONResult);
-
         username = (TextView) findViewById(R.id.textViewUsername);
         name = (TextView) findViewById(R.id.textViewName);
         location = (TextView) findViewById(R.id.textViewLocation);
         following = (TextView) findViewById(R.id.textViewFollowing);
         followers = (TextView) findViewById(R.id.textViewFollowers);
+        btnRepos = (Button) findViewById(R.id.buttonRepos);
+        btnStars = (Button) findViewById(R.id.buttonStars);
 
         Intent i = getIntent();
-        String jsonString = i.getStringExtra("profilekey");
+        String profileJsonString = i.getStringExtra("profilekey");
+        final String repoJsonString = i.getStringExtra("repokey");
+        final String starsJsonString = i.getStringExtra("starskey");
 
         try {
-            JSONObject jObj = new JSONObject(jsonString);
-            int size = jObj.length();
+            JSONObject profileObj = new JSONObject(profileJsonString);
+            int size = profileObj.length();
             // Log GET
-            Log.d("My App: ", jObj.toString());
+           // Log.d("My App: ", jObj.toString());
 
-            profileUrl = jObj.getString(KEY_HTML_URL);
-            avatarUrl = jObj.getString(KEY_AVATAR);
-            login = jObj.getString(KEY_LOGIN);
-            fullname = jObj.getString(KEY_NAME);
-            lction = jObj.getString(KEY_LOCATION);
-            gFollowers = jObj.getInt(KEY_FOLLOWERS);
-            gFollowing = jObj.getInt(KEY_FOLLOWING);
-            gEmail = jObj.getString(KEY_EMAIL);
+            profileUrl = profileObj.getString(KEY_HTML_URL);
+            avatarUrl = profileObj.getString(KEY_AVATAR);
+            login = profileObj.getString(KEY_LOGIN);
+            fullname = profileObj.getString(KEY_NAME);
+            lction = profileObj.getString(KEY_LOCATION);
+            gFollowers = profileObj.getInt(KEY_FOLLOWERS);
+            gFollowing = profileObj.getInt(KEY_FOLLOWING);
+            gEmail = profileObj.getString(KEY_EMAIL);
+            gNumberOfRepos = profileObj.getInt(KEY_NUM_OF_REPOS);
 
-
-
-            // Using Picasso lib
+            // Using Picasso lib to load profile image
             Picasso.with(this)
                     .load(avatarUrl)
                     .error(R.drawable.profilepicture)
@@ -164,16 +170,7 @@ public class Profile extends AppCompatActivity {
             location.setText(lction);
             followers.setText("Followers: " + String.valueOf(gFollowers));
             following.setText("Following: " + String.valueOf(gFollowing));
-
-
-//            varDumpDisplay.setText("Avatar URL : " + avatarUrl +"Login: " + username
-//                + "\n Name: " + name);
-
-
-            // Display unordered JSON
-
-
-//            varDumpDisplay.setText("Lenght is " + size + "\n" + jObj.toString().replace("\\",""));
+            btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
 
         } catch (JSONException e) {
             Log.e("My App: ", "unexpected JSON Exception", e);
@@ -195,6 +192,23 @@ public class Profile extends AppCompatActivity {
                     intent.setPackage(null);
                     startActivity(intent);
                 }
+            }
+        });
+
+        btnRepos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(getApplicationContext(), repoJsonString, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
+
+        btnStars.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(getApplicationContext(), starsJsonString, Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 
