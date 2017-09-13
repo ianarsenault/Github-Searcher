@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -28,6 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static android.R.attr.type;
+import static android.R.id.message;
 import static android.support.design.widget.Snackbar.make;
 import static com.githubsearch.githubsearch.R.id.layoutxx;
 import static com.githubsearch.githubsearch.R.id.snackbar_action;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText githubUsername;
     private FloatingActionButton searchBtn;
     private ProgressBar progressBar;
+    private String profileUrl;
+    private String repoUrl;
+    private String starsUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.INVISIBLE);
 
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = githubUsername.getText().toString();
-                String profileUrl = "https://api.github.com/users/" + username;
-                String repoUrl = "https://api.github.com/users/" + username + "/repos";
-                String starUrl = "https://api.github.com/users/" + username + "/starred";
+                profileUrl = "https://api.github.com/users/" + username;
+                repoUrl = "https://api.github.com/users/" + username + "/repos";
+                starsUrl = "https://api.github.com/users/" + username + "/starred";
                 if (username.isEmpty()) {
 
                     Snackbar snackbar = Snackbar.make(MainActivity.this.findViewById(android.R.id.content), "You must enter a Github Username!", Snackbar.LENGTH_SHORT)
@@ -70,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 } else {
-                    new RetrieveUserInfo().execute(profileUrl, repoUrl, starUrl);
+                    new RetrieveProfileInfo().execute(profileUrl);
+//                    new RetrieveRepoAndStarInfo().execute(repoUrl, starUrl);
                 }
             }
         });
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class RetrieveUserInfo extends AsyncTask<String, Void, JSONObject[]> {
+    private class RetrieveProfileInfo extends AsyncTask<String, Void, JSONObject[]> {
 
         private Exception exception;
 
@@ -90,13 +98,14 @@ public class MainActivity extends AppCompatActivity {
         protected JSONObject[] doInBackground(String... urls) {
             JSONParser jsonParser = new JSONParser();
             String urlProfile = urls[0];
-            String urlRepos = urls[1];
-            String urlStars = urls[2];
+//            String urlRepos = urls[1];
+//            String urlStars = urls[2];
 
-            JSONObject[] jsons = new JSONObject[3];
+            JSONObject[] jsons = new JSONObject[1];
             jsons[0] = jsonParser.getJSONFromUrl(urlProfile);
-            jsons[1] = jsonParser.getJSONFromUrl(urlRepos);
-            jsons[2] = jsonParser.getJSONFromUrl(urlStars);
+//            jsons[1] = jsonParser.getJSONFromUrl(urlRepos);
+//            jsons[2] = jsonParser.getJSONFromUrl(urlStars);
+
 
             return jsons;
 
@@ -119,29 +128,113 @@ public class MainActivity extends AppCompatActivity {
 
                 return;
             }
+
             String response = jsons.toString();
             JSONObject githubProfile = jsons[0];
-            JSONObject githubRepos = jsons[1];
-            JSONObject githubStars = jsons[2];
+//            JSONObject githubRepos = jsons[1];
+//            JSONObject githubStars = jsons[2];
+
 
             // Set progress bar invisible
             progressBar.setVisibility(View.INVISIBLE);
 
 
+//            int maxLogSize = 2000;
+//            for (int i = 0; i <= githubRepos.toString().length() / maxLogSize; i++) {
+//                int start = i * maxLogSize;
+//                int end = (i + 1) * maxLogSize;
+//                end = end > githubRepos.toString().length() ? githubRepos.toString().length() : end;
+//                android.util.Log.d("REPOS RESPONSE", githubRepos.toString().substring(start, end));
+//            }
+//
+//            for (int i = 0; i <= githubStars.toString().length() / maxLogSize; i++) {
+//                int start = i * maxLogSize;
+//                int end = (i + 1) * maxLogSize;
+//                end = end > githubStars.toString().length() ? githubStars.toString().length() : end;
+//                android.util.Log.d("STARS RESPONSE", githubStars.toString().substring(start, end));
+//            }
+
+
             Log.i("INFO", response);
-            Log.i("PROFILE RESPONSE " , githubProfile.toString());
-            Log.i("REPOS RESPONSE " , githubRepos.toString());
-            Log.i("STARS RESPONSE" , githubStars.toString());
+            Log.i("PROFILE RESPONSE ", githubProfile.toString());
+//            Log.i("REPOS RESPONSE ", githubRepos.toString());
+//            Log.i("STARS RESPONSE", githubStars.toString());
 
             // Create intent to pass json object to Profile page
             Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.Profile.class);
             i.putExtra("profilekey", githubProfile.toString());
-            i.putExtra("repokey", githubRepos.toString());
-            i.putExtra("starskey", githubStars.toString());
+            i.putExtra("repoUrl", repoUrl);
+            i.putExtra("starsUrl", starsUrl);
             startActivityForResult(i, REQUEST_CODE);
 
         }
     }
+
+//
+//    private class RetrieveRepoAndStarInfo extends AsyncTask<String, Void, JSONArray[]> {
+//
+//        private Exception exception;
+//
+//        protected void onPreExecute() {
+//            // Show progress bar
+//            progressBar.setVisibility(View.VISIBLE);
+//        }
+//
+//        protected JSONArray[] doInBackground(String... urls) {
+//            JSONParser jsonParser = new JSONParser();
+//            String urlRepo = urls[0];
+//            String urlStars = urls[1];
+//
+//            JSONArray[] jsons = new JSONArray[2];
+//            jsons[0] = jsonParser.getJSONArrayFromUrl(urlRepo);
+//            jsons[1] = jsonParser.getJSONArrayFromUrl(urlStars);
+//
+//            return jsons;
+//
+//        }
+//
+//        protected void onPostExecute(JSONArray[] jsons) {
+//            if (jsons[0] == null) {
+//                // Set progress bar invisible
+//                progressBar.setVisibility(View.INVISIBLE);
+//                return;
+//            }
+//
+//            String response = jsons.toString();
+//            JSONArray githubRepos = jsons[0];
+//            JSONArray githubStars = jsons[1];
+//
+//
+////            Log.i("LENGTH OF REPO ARRAY: ", String.valueOf(githubRepos.length()));
+////            Log.i("LENGHT OF STARS ARRAY: ", String.valueOf(githubStars.length()));
+//
+//
+//            // Set progress bar invisible
+//            progressBar.setVisibility(View.INVISIBLE);
+//
+//
+////            int maxLogSize = 2000;
+////            for (int i = 0; i <= response.length() / maxLogSize; i++) {
+////                int start = i * maxLogSize;
+////                int end = (i + 1) * maxLogSize;
+////                end = end > response.length() ? response.length() : end;
+////                android.util.Log.d("***REPOS RESPONSE****", response.substring(start, end));
+////            }
+//
+//
+////            Log.i("*** REPO REPONSE", response);
+////            Log.i("REPOS RESPONSE ", githubRepos.toString());
+////            Log.i("STARS RESPONSE", githubStars.toString());
+//
+//            // Create intent to pass json array to Profile activity to pass to listview fragments/activities
+//            Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.Profile.class);
+//            // TODO: CHECK TO MAKE SURE STRING WORKS OR JUST PASS JSONArray
+//            i.putExtra("repokey", githubRepos.toString());
+//            i.putExtra("starskey", githubStars.toString());
+//            startActivityForResult(i, REQUEST_CODE);
+//
+//        }
+//    }
 
 
 

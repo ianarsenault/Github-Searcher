@@ -16,9 +16,11 @@ import java.net.URL;
 public class JSONParser {
     private static String json = "";
     private static JSONObject obj = null;
+    private static JSONArray objArr = null;
 
 
-    public JSONParser() {}
+    public JSONParser() {
+    }
 
     public JSONObject getJSONFromUrl(String url) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -46,7 +48,7 @@ public class JSONParser {
             } catch (FileNotFoundException e) {
                 Log.e("NO FILE: ", e.toString());
 
-            } finally{
+            } finally {
                 urlConnection.disconnect();
             }
 
@@ -70,11 +72,66 @@ public class JSONParser {
                 Log.e("JSON Parser", "Error parsing data " + e.toString());
             }
 
-            // return JSON String
+            // return JSON Object
             return obj;
 
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage(), e);
+            return null;
         }
-        catch(Exception e) {
+
+    }
+
+
+    public JSONArray getJSONArrayFromUrl(String url) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try {
+            URL newUrl = new URL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) newUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            int statusCode = urlConnection.getResponseCode();
+
+            if (statusCode != 200) {
+                return null;
+            }
+
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+                bufferedReader.close();
+                json = stringBuilder.toString();
+            } catch (FileNotFoundException e) {
+                Log.e("NO FILE: ", e.toString());
+
+            } finally {
+                urlConnection.disconnect();
+            }
+
+            // try parse the string to a JSON object
+            try {
+                //jObj = new JSONObject(json);
+                Object jsonCheck = new JSONTokener(json).nextValue();
+                if (jsonCheck instanceof JSONArray) {
+                    objArr = new JSONArray(json);
+                } else {
+                    objArr = null;
+                }
+
+
+            } catch (JSONException e) {
+                Log.e("JSON Parser", "Error parsing data " + e.toString());
+            }
+
+            // return JSON Object
+            return objArr;
+
+        } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
             return null;
         }

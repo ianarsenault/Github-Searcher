@@ -1,14 +1,13 @@
 /**
- *  Github API Calls
- *
- *
- *  Get repos list
- *  "https://api.github.com/users/gorgonsmaze/repos"
- *
+ * Github API Calls
+ * <p>
+ * <p>
+ * Get repos list
+ * "https://api.github.com/users/gorgonsmaze/repos"
+ * <p>
  * Get starred list
  * "https://api.github.com/users/gorgonsmaze/starred"
- *
- */
+ **/
 
 /**
  {"received_events_url":"https://api.github.com\/users\/GorgonsMaze\/received_events",
@@ -51,6 +50,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -121,6 +121,12 @@ public class Profile extends AppCompatActivity {
     private String gEmail;
     private int gNumberOfRepos;
 
+    JSONArray repoArray;
+    JSONArray starsArray;
+//    private String repoJsonArrayString;
+//    private String starsJsonArrayString;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,16 +146,26 @@ public class Profile extends AppCompatActivity {
         btnRepos = (Button) findViewById(R.id.buttonRepos);
         btnStars = (Button) findViewById(R.id.buttonStars);
 
+        btnRepos.setEnabled(false);
+        btnStars.setEnabled(false);
+
         Intent i = getIntent();
         String profileJsonString = i.getStringExtra("profilekey");
-        final String repoJsonString = i.getStringExtra("repokey");
-        final String starsJsonString = i.getStringExtra("starskey");
+        String profileRepoUrl = i.getStringExtra("repoUrl");
+        String profileStarsUrl = i.getStringExtra("starsUrl");
+
+        // Make call to API for Repos and Stars
+        new RetrieveRepoAndStarInfo().execute(profileRepoUrl, profileStarsUrl);
+
+//        Toast.makeText(this, profileRepoUrl + " " + profileStarsUrl, Toast.LENGTH_LONG).show();
 
         try {
             JSONObject profileObj = new JSONObject(profileJsonString);
-            int size = profileObj.length();
-            // Log GET
-           // Log.d("My App: ", jObj.toString());
+
+//            Log.i("Repo size: ", String.valueOf(repoArray.length()));
+//            Log.i("Stars size: ", String.valueOf(starsArray.length()));
+
+//            Log.i("Repo Array", repoArray.toString());
 
             profileUrl = profileObj.getString(KEY_HTML_URL);
             avatarUrl = profileObj.getString(KEY_AVATAR);
@@ -168,12 +184,14 @@ public class Profile extends AppCompatActivity {
                     .into(profilePicture);
 
             // TODO ERROR HANDLE FOR NULL OR BLANK RETURNS
+
             username.setText("@" + login);
             name.setText(fullname);
             location.setText(lction);
             followers.setText("Followers: " + String.valueOf(gFollowers));
             following.setText("Following: " + String.valueOf(gFollowing));
             btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
+
 
         } catch (JSONException e) {
             Log.e("My App: ", "unexpected JSON Exception", e);
@@ -202,7 +220,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                 /** TOAST CENTERED ON TOP EXAMPLE **/
+                /** TOAST CENTERED ON TOP EXAMPLE **/
 //                Toast toast=Toast.makeText(getApplicationContext(),"This is advanced toast",Toast.LENGTH_LONG);
 //                toast.setGravity(Gravity.TOP | Gravity.CENTER,0,171);
 //                View v=toast.getView();
@@ -210,8 +228,14 @@ public class Profile extends AppCompatActivity {
 //                v.setBackgroundResource(R.color.blankUsernameColor);
 //                toast.show();
 
+                if (repoArray.length() > 0) {
 
-                if (gNumberOfRepos == 0) {
+                    // TODO SEND repoArray over through INTENT new Fragment OR Activity
+
+                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(repoArray.length()), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else {
                     Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no repos!", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null);
                     snackbar.show();
@@ -221,11 +245,6 @@ public class Profile extends AppCompatActivity {
                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
                 }
 
-                Toast toast = Toast.makeText(getApplicationContext(), repoJsonString, Toast.LENGTH_SHORT);
-                toast.show();
-
-
-                // ELSE OPEN FRAGMENT/ACTIVITY DISPLAY REPOS
             }
         });
 
@@ -233,18 +252,34 @@ public class Profile extends AppCompatActivity {
         btnStars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast toast = Toast.makeText(getApplicationContext(), starsJsonString, Toast.LENGTH_SHORT);
-                toast.show();
+                if (starsArray.length() > 0) {
+
+                    // TODO SEND starsArray over through INTENT new Fragment OR Activity
+
+
+                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(starsArray.length()), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else {
+                    Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no starred repos!", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    snackbar.show();
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blankUsernameColor));
+                    TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+
             }
         });
 
 
-
-        ((ImageButton)findViewById(R.id.imageButtonEmail)).setOnTouchListener(new View.OnTouchListener() {
+        ((ImageButton) findViewById(R.id.imageButtonEmail)).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        // TODO: ADD BACKGROUND/BORDER COLOR TO IMAGE
 //                        Toast toast = Toast.makeText(getApplicationContext(), "EMAIL BUTTON PRESSED" , Toast.LENGTH_SHORT);
 //                        toast.show();
 //                        ImageButton imgView = (ImageButton ) view;
@@ -253,9 +288,23 @@ public class Profile extends AppCompatActivity {
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        Toast emailToast = Toast.makeText(getApplicationContext(), gEmail , Toast.LENGTH_SHORT);
-                        emailToast.show();
-                       break;
+                        if (gEmail.equals("null")) {
+                            Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "No email for @" + login, Snackbar.LENGTH_SHORT)
+                                    .setAction("Action", null);
+                            snackbar.show();
+                            View snackbarView = snackbar.getView();
+                            snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                            TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                        } else {
+
+                            // TODO OPEN UP USER EMAIL APPLICATION => PASS EMAIL
+                            Toast emailToast = Toast.makeText(getApplicationContext(), gEmail, Toast.LENGTH_SHORT);
+                            emailToast.show();
+                        }
+
+                        break;
 
                     case MotionEvent.ACTION_CANCEL:
                         ImageButton imgView = (ImageButton) view;
@@ -269,6 +318,56 @@ public class Profile extends AppCompatActivity {
         });
 
 
+    }
+
+
+    private class RetrieveRepoAndStarInfo extends AsyncTask<String, Void, JSONArray[]> {
+
+        private Exception exception;
+
+        protected void onPreExecute() {
+            // Show progress bar
+            //progressBar.setVisibility(View.VISIBLE);
+        }
+
+        protected JSONArray[] doInBackground(String... urls) {
+            JSONParser jsonParser = new JSONParser();
+            String urlRepo = urls[0];
+            String urlStars = urls[1];
+
+            JSONArray[] jsons = new JSONArray[2];
+            jsons[0] = jsonParser.getJSONArrayFromUrl(urlRepo);
+            jsons[1] = jsonParser.getJSONArrayFromUrl(urlStars);
+
+            return jsons;
+
+        }
+
+        protected void onPostExecute(JSONArray[] jsons) {
+            if (jsons[0] == null) {
+                // Set progress bar invisible
+                //progressBar.setVisibility(View.INVISIBLE);
+                return;
+            }
+
+            // Enable buttons
+            btnRepos.setEnabled(true);
+            btnStars.setEnabled(true);
+
+            String response = jsons.toString();
+            repoArray = jsons[0];
+            starsArray = jsons[1];
+
+
+            Log.i("LENGTH OF REPO ARRAY: ", String.valueOf(repoArray.length()));
+            Log.i("LENGHT OF STARS ARRAY: ", String.valueOf(starsArray.length()));
+            Log.i("REPOS RESPONSE ", repoArray.toString());
+            Log.i("STARS RESPONSE", starsArray.toString());
+
+            Toast.makeText(getApplicationContext(), "Repo length: " + String.valueOf(repoArray.length()), Toast.LENGTH_SHORT).show();
+
+
+        }
     }
 
     @Override
