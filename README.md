@@ -12,4 +12,7 @@ An Android web app that allows anyone to search Github users, retrieve profile i
 
 ![Image](https://i.imgur.com/GaevEiP.png)
 
+## Future TODOs
+- Add authentication (oauth) for higher rate limit with api (Current is basic - 60 requests/hr)
+
 ##### Creator: Ian Arsenault
