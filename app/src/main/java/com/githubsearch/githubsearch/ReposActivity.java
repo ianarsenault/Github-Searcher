@@ -22,15 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.githubsearch.githubsearch.R.id.textViewTest;
 
 public class ReposActivity extends AppCompatActivity {
 
     private ImageView profilePicture;
     private TextView username;
-    private TextView test;
     private JSONArray repoArray;
-    private JSONObject json_repo;
 
     private static final String KEY_NAME = "name";
     private static final String KEY_FULLNAME = "full_name";
@@ -39,6 +36,14 @@ public class ReposActivity extends AppCompatActivity {
     private static final String KEY_LAST_UPDATE = "updated_at";
     private static final String KEY_LANGUAGE = "language";
     private static final String KEY_FORKS_COUNT = "forks_count";
+
+    private String repoName;
+    private String repoFullName;
+    private String repoDescription;
+    private String repoUrl;
+    private String lastRepoUpdate;
+    private String repoLanguage;
+    private int repoForksCount;
 
 
 
@@ -53,7 +58,6 @@ public class ReposActivity extends AppCompatActivity {
 
         profilePicture = (ImageView) findViewById(R.id.imageViewProfilePicture);
         username = (TextView) findViewById(R.id.textViewUsername);
-        test = (TextView) findViewById(R.id.textViewTest);
 
         Intent intent = getIntent();
         String profileImageUrl = intent.getStringExtra("profileimage");
@@ -82,23 +86,29 @@ public class ReposActivity extends AppCompatActivity {
 
         for (int i = 0; i < repoArray.length(); i++) {
             try {
-                json_repo = repoArray.getJSONObject(i);
-                json_repo.getString(KEY_FULLNAME)
+                JSONObject json_repo = repoArray.getJSONObject(i);
+                repoName = json_repo.getString(KEY_NAME);
+                repoFullName = json_repo.getString(KEY_FULLNAME);
+                repoDescription = json_repo.getString(KEY_DESCRIPTION);
+                repoUrl = json_repo.getString(KEY_REPO_URL);
+                lastRepoUpdate = json_repo.getString(KEY_LAST_UPDATE);
+                repoForksCount = json_repo.getInt(KEY_FORKS_COUNT);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            // resolve json gets to strings or ints to display in set text
-            test.setText(json_repo.getString(KEY_FULLNAME));
+            // TODO: CHECK FOR NULL VALUES - DISPLAY ACCORDINGLY
+
+            adapter.add(repoFullName + "\n"
+                    + repoDescription + "\n"
+                    + lastRepoUpdate + "\n"
+                    + String.valueOf(repoForksCount));
+
+
         }
 
-
-//        Toast toast = Toast.makeText(this, String.valueOf(repoArray.length()), Toast.LENGTH_LONG);
-//        toast.show();
-
-
-
-
+        repoResults.setAdapter(adapter);
 
     }
 
