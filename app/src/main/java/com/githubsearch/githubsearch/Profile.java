@@ -9,37 +9,97 @@
  * "https://api.github.com/users/gorgonsmaze/starred"
  **/
 
-/**
- {"received_events_url":"https://api.github.com\/users\/GorgonsMaze\/received_events",
- "organizations_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/orgs",
- "avatar_url":"https:\/\/avatars3.githubusercontent.com\/u\/12011826?v=4",
- "gravatar_id":"",
- "public_gists":5,
- "location":"localhost",
- "site_admin":false,
- "blog":"https:\/\/keybase.io\/ian_a",
- "type":"User",
- "id":12011826,
- "following":19,
- "followers":11,
- "public_repos":34,
- "name":"Ian Arsenault",
- "following_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/following{\/other_user}",
- "created_at":"2015-04-18T20:54:01Z",
- "events_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/events{\/privacy}",
- "login":"GorgonsMaze",
- "subscriptions_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/subscriptions",
- "repos_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/repos",
- "gists_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/gists{\/gist_id}",
- "starred_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/starred{\/owner}{\/repo}",
- "url":"https:\/\/api.github.com\/users\/GorgonsMaze",
- "html_url":"https:\/\/github.com\/GorgonsMaze",
- "hireable":true,
- "updated_at":"2017-08-24T04:20:07Z",
- "bio":null,
- "email":null,
- "company":null,
- "followers_url":"https:\/\/api.github.com\/users\/GorgonsMaze\/followers"}
+/** "https://api.github.com/users/gorgonsmaze/repos" request produces
+ *
+ {
+     "id": 73977017,
+     "name": "ripta-api",
+     "full_name": "GorgonsMaze/ripta-api",
+     "owner": {
+     "login": "GorgonsMaze",
+     "id": 12011826,
+     "avatar_url": "https://avatars3.githubusercontent.com/u/12011826?v=4",
+     "gravatar_id": "",
+     "url": "https://api.github.com/users/GorgonsMaze",
+     "html_url": "https://github.com/GorgonsMaze",
+     "followers_url": "https://api.github.com/users/GorgonsMaze/followers",
+     "following_url": "https://api.github.com/users/GorgonsMaze/following{/other_user}",
+     "gists_url": "https://api.github.com/users/GorgonsMaze/gists{/gist_id}",
+     "starred_url": "https://api.github.com/users/GorgonsMaze/starred{/owner}{/repo}",
+     "subscriptions_url": "https://api.github.com/users/GorgonsMaze/subscriptions",
+     "organizations_url": "https://api.github.com/users/GorgonsMaze/orgs",
+     "repos_url": "https://api.github.com/users/GorgonsMaze/repos",
+     "events_url": "https://api.github.com/users/GorgonsMaze/events{/privacy}",
+     "received_events_url": "https://api.github.com/users/GorgonsMaze/received_events",
+     "type": "User",
+     "site_admin": false
+    },
+     "private": false,
+     "html_url": "https://github.com/GorgonsMaze/ripta-api",
+     "description": null,
+     "fork": true,
+     "url": "https://api.github.com/repos/GorgonsMaze/ripta-api",
+     "forks_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/forks",
+     "keys_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/keys{/key_id}",
+     "collaborators_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/collaborators{/collaborator}",
+     "teams_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/teams",
+     "hooks_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/hooks",
+     "issue_events_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/issues/events{/number}",
+     "events_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/events",
+     "assignees_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/assignees{/user}",
+     "branches_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/branches{/branch}",
+     "tags_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/tags",
+     "blobs_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/git/blobs{/sha}",
+     "git_tags_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/git/tags{/sha}",
+     "git_refs_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/git/refs{/sha}",
+     "trees_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/git/trees{/sha}",
+     "statuses_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/statuses/{sha}",
+     "languages_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/languages",
+     "stargazers_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/stargazers",
+     "contributors_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/contributors",
+     "subscribers_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/subscribers",
+     "subscription_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/subscription",
+     "commits_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/commits{/sha}",
+     "git_commits_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/git/commits{/sha}",
+     "comments_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/comments{/number}",
+     "issue_comment_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/issues/comments{/number}",
+     "contents_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/contents/{+path}",
+     "compare_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/compare/{base}...{head}",
+     "merges_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/merges",
+     "archive_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/{archive_format}{/ref}",
+     "downloads_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/downloads",
+     "issues_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/issues{/number}",
+     "pulls_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/pulls{/number}",
+     "milestones_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/milestones{/number}",
+     "notifications_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/notifications{?since,all,participating}",
+     "labels_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/labels{/name}",
+     "releases_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/releases{/id}",
+     "deployments_url": "https://api.github.com/repos/GorgonsMaze/ripta-api/deployments",
+     "created_at": "2016-11-17T01:18:15Z",
+     "updated_at": "2016-12-02T22:53:23Z",
+     "pushed_at": "2017-09-10T11:47:09Z",
+     "git_url": "git://github.com/GorgonsMaze/ripta-api.git",
+     "ssh_url": "git@github.com:GorgonsMaze/ripta-api.git",
+     "clone_url": "https://github.com/GorgonsMaze/ripta-api.git",
+     "svn_url": "https://github.com/GorgonsMaze/ripta-api",
+     "homepage": null,
+     "size": 10357,
+     "stargazers_count": 0,
+     "watchers_count": 0,
+     "language": "JavaScript",
+     "has_issues": false,
+     "has_projects": true,
+     "has_downloads": true,
+     "has_wiki": true,
+     "has_pages": false,
+     "forks_count": 1,
+     "mirror_url": null,
+     "open_issues_count": 0,
+     "forks": 1,
+     "open_issues": 0,
+     "watchers": 0,
+     "default_branch": "master"
+ }
 
  **/
 
@@ -231,6 +291,11 @@ public class Profile extends AppCompatActivity {
                 if (repoArray.length() > 0) {
 
                     // TODO SEND repoArray over through INTENT new Fragment OR Activity
+                    Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.ReposActivity.class);
+                    i.putExtra("profileimage", avatarUrl);
+                    i.putExtra("userid", login);
+                    i.putExtra("reposarray", repoArray.toString());
+                    startActivityForResult(i, 10);
 
                     Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(repoArray.length()), Toast.LENGTH_SHORT);
                     toast.show();
@@ -255,7 +320,11 @@ public class Profile extends AppCompatActivity {
                 if (starsArray.length() > 0) {
 
                     // TODO SEND starsArray over through INTENT new Fragment OR Activity
-
+                    Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.StarsActivity.class);
+                    i.putExtra("profileimage", avatarUrl);
+                    i.putExtra("userid", login);
+                    i.putExtra("reposarray", repoArray.toString());
+                    startActivityForResult(i, 10);
 
                     Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(starsArray.length()), Toast.LENGTH_SHORT);
                     toast.show();

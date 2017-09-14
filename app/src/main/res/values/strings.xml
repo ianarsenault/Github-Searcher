@@ -2,5 +2,8 @@
     <string name="app_name">Github Searcher</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_profile">Github Profile</string>
-    <string name="back_home">Back Home</string>
+    <!--<string name="back_home">Back Home</string>-->
+    <string name="title_activity_repos">Repositories</string>
+    <string name="back_to_profile">Back To Profile</string>
+    <string name="title_activity_stars">StarsActivity</string>
 </resources>
