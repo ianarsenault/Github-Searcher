@@ -129,7 +129,7 @@
         android:id="@+id/imageButtonEmail"
         android:layout_width="35dp"
         android:layout_height="29dp"
-        app:srcCompat="@drawable/ic_email_black_24dp"
+        app:srcCompat="@drawable/ic_email_black"
         android:scaleType="centerCrop"
         android:padding="0dp"
         android:layout_marginTop="28dp"

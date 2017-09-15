@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class ReposActivity extends AppCompatActivity {
 
@@ -32,7 +34,7 @@ public class ReposActivity extends AppCompatActivity {
     private static final String KEY_NAME = "name";
     private static final String KEY_FULLNAME = "full_name";
     private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_REPO_URL = "url";
+    private static final String KEY_REPO_URL = "svn_url";
     private static final String KEY_LAST_UPDATE = "updated_at";
     private static final String KEY_LANGUAGE = "language";
     private static final String KEY_FORKS_COUNT = "forks_count";
@@ -44,6 +46,8 @@ public class ReposActivity extends AppCompatActivity {
     private String lastRepoUpdate;
     private String repoLanguage;
     private int repoForksCount;
+
+    ImageView image;
 
 
 
@@ -78,11 +82,7 @@ public class ReposActivity extends AppCompatActivity {
 
         username.setText("@" + loginId);
 
-        ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1);
-
+        final ArrayList<RepoInformation> myRepoList = new ArrayList<RepoInformation>();
 
         for (int i = 0; i < repoArray.length(); i++) {
             try {
@@ -93,22 +93,54 @@ public class ReposActivity extends AppCompatActivity {
                 repoUrl = json_repo.getString(KEY_REPO_URL);
                 lastRepoUpdate = json_repo.getString(KEY_LAST_UPDATE);
                 repoForksCount = json_repo.getInt(KEY_FORKS_COUNT);
+                repoLanguage = json_repo.getString(KEY_LANGUAGE);
+                myRepoList.add(new RepoInformation(repoName, repoDescription, repoUrl, lastRepoUpdate, repoForksCount, repoLanguage));
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            // TODO: CHECK FOR NULL VALUES - DISPLAY ACCORDINGLY
-
-            adapter.add(repoFullName + "\n"
-                    + repoDescription + "\n"
-                    + lastRepoUpdate + "\n"
-                    + String.valueOf(repoForksCount));
-
-
         }
 
+        RepoInformationAdapter adapter = new RepoInformationAdapter(getApplicationContext(),
+                R.layout.item_listview_row, myRepoList);
+
+        ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
         repoResults.setAdapter(adapter);
+
+
+
+//        ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//                android.R.layout.item_listview_row), ;
+//
+//
+//        for (int i = 0; i < repoArray.length(); i++) {
+//            try {
+//                JSONObject json_repo = repoArray.getJSONObject(i);
+//                repoName = json_repo.getString(KEY_NAME);
+//                repoFullName = json_repo.getString(KEY_FULLNAME);
+//                repoDescription = json_repo.getString(KEY_DESCRIPTION);
+//                repoUrl = json_repo.getString(KEY_REPO_URL);
+//                lastRepoUpdate = json_repo.getString(KEY_LAST_UPDATE);
+//                repoForksCount = json_repo.getInt(KEY_FORKS_COUNT);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            // TODO: CHECK FOR NULL VALUES - DISPLAY ACCORDINGLY
+//
+//            adapter.add(repoFullName + "\n"
+//                    + repoDescription + "\n"
+//                    + lastRepoUpdate + "\n"
+//                    + String.valueOf(repoForksCount));
+//
+//
+//        }
+//
+//        repoResults.setAdapter(adapter);
 
     }
 

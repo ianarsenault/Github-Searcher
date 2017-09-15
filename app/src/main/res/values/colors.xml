@@ -8,4 +8,5 @@
     <color name="blankUsernameColor">#e23235</color>
     <color name="coolGreen">#32e247</color>
     <color name="coolPurple">#7b32e2</color>
+    <color name="black">#000</color>
 </resources>
