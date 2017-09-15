@@ -50,7 +50,7 @@ public class RepoInformationAdapter extends ArrayAdapter<RepoInformation> {
         RepoInformation singleRepo = data.get(position);
         holder.txtName.setText(singleRepo.name);
         holder.txtDescription.setText(singleRepo.description);
-        holder.txtForkCount.setText(String.valueOf(singleRepo.forkCount));
+        holder.txtForkCount.setText("Forks: " + String.valueOf(singleRepo.forkCount));
         holder.txtLastUpdate.setText(singleRepo.lastUpdated);
         holder.txtUrl.setText(singleRepo.url);
         holder.txtLanguage.setText(singleRepo.language);

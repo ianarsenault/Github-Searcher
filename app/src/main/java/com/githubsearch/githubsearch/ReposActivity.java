@@ -22,7 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static android.provider.Settings.System.DATE_FORMAT;
 
 
 public class ReposActivity extends AppCompatActivity {
@@ -35,7 +39,7 @@ public class ReposActivity extends AppCompatActivity {
     private static final String KEY_FULLNAME = "full_name";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_REPO_URL = "svn_url";
-    private static final String KEY_LAST_UPDATE = "updated_at";
+    private static final String KEY_LAST_UPDATE = "pushed_at";
     private static final String KEY_LANGUAGE = "language";
     private static final String KEY_FORKS_COUNT = "forks_count";
 
@@ -80,6 +84,9 @@ public class ReposActivity extends AppCompatActivity {
                 .error(R.drawable.profilepicture)
                 .into(profilePicture);
 
+
+        // TODO Format Last Repo Update DATE TIME!!!!
+
         username.setText("@" + loginId);
 
         final ArrayList<RepoInformation> myRepoList = new ArrayList<RepoInformation>();
@@ -94,7 +101,11 @@ public class ReposActivity extends AppCompatActivity {
                 lastRepoUpdate = json_repo.getString(KEY_LAST_UPDATE);
                 repoForksCount = json_repo.getInt(KEY_FORKS_COUNT);
                 repoLanguage = json_repo.getString(KEY_LANGUAGE);
-                myRepoList.add(new RepoInformation(repoName, repoDescription, repoUrl, lastRepoUpdate, repoForksCount, repoLanguage));
+
+                // "2017-09-10T11:47:09Z"
+                String newLastRepoUpdate = "Updated: " + lastRepoUpdate.substring(11,19) + " on " + lastRepoUpdate.substring(0, 10);
+
+                myRepoList.add(new RepoInformation(repoName, repoDescription, repoUrl, newLastRepoUpdate, repoForksCount, repoLanguage));
 
             } catch (JSONException e) {
                 e.printStackTrace();

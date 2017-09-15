@@ -32,8 +32,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_email_black" />
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_fingerprint" />
 
         <!--<ImageView-->
             <!--android:id="@+id/imageView2"-->
@@ -79,8 +79,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_email_black" />
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_description" />
 
         <TextView
             android:id="@+id/tvDescription"
@@ -103,7 +103,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
+            android:scaleType="fitStart"
             android:src="@drawable/ic_fork" />
 
         <TextView
@@ -126,8 +126,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_email_black" />
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_date" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
+            android:scaleType="fitStart"
             android:src="@drawable/ic_web" />
 
         <TextView
@@ -177,8 +177,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_email_black" />
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_code" />
 
         <TextView
             android:id="@+id/tvLanguage"
