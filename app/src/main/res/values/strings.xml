@@ -5,5 +5,5 @@
     <!--<string name="back_home">Back Home</string>-->
     <string name="title_activity_repos">Repositories</string>
     <string name="back_to_profile">Back To Profile</string>
-    <string name="title_activity_stars">StarsActivity</string>
+    <string name="title_activity_stars">Stars</string>
 </resources>

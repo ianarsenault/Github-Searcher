@@ -9,8 +9,44 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class StarsActivity extends AppCompatActivity {
+
+
+    private ImageView profilePicture;
+    private TextView username;
+    private JSONArray starsArray;
+
+    private static final String KEY_NAME = "name";
+    private static final String KEY_FULLNAME = "full_name";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_REPO_URL = "svn_url";
+    private static final String KEY_LAST_UPDATE = "pushed_at";
+    private static final String KEY_LANGUAGE = "language";
+    private static final String KEY_FORKS_COUNT = "forks_count";
+
+    private String repoName;
+    private String repoFullName;
+    private String repoDescription;
+    private String repoUrl;
+    private String lastRepoUpdate;
+    private String repoLanguage;
+    private int repoForksCount;
+
+    ImageView image;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +55,62 @@ public class StarsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.github_icon);
         setSupportActionBar(toolbar);
+
+
+        profilePicture = (ImageView) findViewById(R.id.imageViewProfilePicture);
+        username = (TextView) findViewById(R.id.textViewUsername);
+
+        Intent intent = getIntent();
+        String profileImageUrl = intent.getStringExtra("profileimage");
+        String loginId = intent.getStringExtra("userid");
+        String profileStarsArray = intent.getStringExtra("starsarray");
+
+        try {
+            starsArray = new JSONArray(profileStarsArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Using Picasso lib to load profile image
+        Picasso.with(this)
+                .load(profileImageUrl)
+                .error(R.drawable.profilepicture)
+                .into(profilePicture);
+
+
+        // TODO Format Last Repo Update DATE TIME!!!!
+
+        username.setText("@" + loginId);
+
+        final ArrayList<RepoInformation> myRepoList = new ArrayList<RepoInformation>();
+
+        for (int i = 0; i < starsArray.length(); i++) {
+            try {
+                JSONObject json_repo = starsArray.getJSONObject(i);
+                repoName = json_repo.getString(KEY_NAME);
+                repoFullName = json_repo.getString(KEY_FULLNAME);
+                repoDescription = json_repo.getString(KEY_DESCRIPTION);
+                repoUrl = json_repo.getString(KEY_REPO_URL);
+                lastRepoUpdate = json_repo.getString(KEY_LAST_UPDATE);
+                repoForksCount = json_repo.getInt(KEY_FORKS_COUNT);
+                repoLanguage = json_repo.getString(KEY_LANGUAGE);
+
+                // "2017-09-10T11:47:09Z"
+                String newLastRepoUpdate = "Updated: " + lastRepoUpdate.substring(11,19) + " on " + lastRepoUpdate.substring(0, 10);
+
+                myRepoList.add(new RepoInformation(repoName, repoDescription, repoUrl, newLastRepoUpdate, repoForksCount, repoLanguage));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        RepoInformationAdapter adapter = new RepoInformationAdapter(getApplicationContext(),
+                R.layout.item_listview_row, myRepoList);
+
+        ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
+        repoResults.setAdapter(adapter);
 
 
     }
@@ -53,5 +145,6 @@ public class StarsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

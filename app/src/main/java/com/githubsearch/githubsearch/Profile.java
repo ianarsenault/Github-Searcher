@@ -144,7 +144,7 @@ import static android.R.attr.width;
 import static android.os.Build.VERSION_CODES.O;
 
 public class Profile extends AppCompatActivity {
-
+    private static final int REQUEST_CODE = 10;
     private TextView varDumpDisplay;
     private ImageView profilePicture;
     private TextView username;
@@ -237,26 +237,28 @@ public class Profile extends AppCompatActivity {
             gEmail = profileObj.getString(KEY_EMAIL);
             gNumberOfRepos = profileObj.getInt(KEY_NUM_OF_REPOS);
 
-            // Using Picasso lib to load profile image
-            Picasso.with(this)
-                    .load(avatarUrl)
-                    .error(R.drawable.profilepicture)
-                    .into(profilePicture);
-
-            // TODO ERROR HANDLE FOR NULL OR BLANK RETURNS
-
-            username.setText("@" + login);
-            name.setText(fullname);
-            location.setText(lction);
-            followers.setText("Followers: " + String.valueOf(gFollowers));
-            following.setText("Following: " + String.valueOf(gFollowing));
-            btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
-
 
         } catch (JSONException e) {
             Log.e("My App: ", "unexpected JSON Exception", e);
         }
 
+
+
+        // DISPLAY DATA
+        // Using Picasso lib to load profile image
+        Picasso.with(this)
+                .load(avatarUrl)
+                .error(R.drawable.profilepicture)
+                .into(profilePicture);
+
+        // TODO ERROR HANDLE FOR NULL OR BLANK RETURNS
+
+        username.setText("@" + login);
+        name.setText(fullname);
+        location.setText(lction);
+        followers.setText("Followers: " + String.valueOf(gFollowers));
+        following.setText("Following: " + String.valueOf(gFollowing));
+        btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabChrome);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -295,10 +297,10 @@ public class Profile extends AppCompatActivity {
                     i.putExtra("profileimage", avatarUrl);
                     i.putExtra("userid", login);
                     i.putExtra("reposarray", repoArray.toString());
-                    startActivityForResult(i, 10);
+                    startActivityForResult(i, REQUEST_CODE);
 
-                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(repoArray.length()), Toast.LENGTH_SHORT);
-                    toast.show();
+//                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(repoArray.length()), Toast.LENGTH_SHORT);
+//                    toast.show();
                 }
                 else {
                     Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no repos!", Snackbar.LENGTH_SHORT)
@@ -323,11 +325,11 @@ public class Profile extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.StarsActivity.class);
                     i.putExtra("profileimage", avatarUrl);
                     i.putExtra("userid", login);
-                    i.putExtra("reposarray", repoArray.toString());
-                    startActivityForResult(i, 10);
-
-                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(starsArray.length()), Toast.LENGTH_SHORT);
-                    toast.show();
+                    i.putExtra("starsarray", starsArray.toString());
+                    startActivityForResult(i, REQUEST_CODE);
+//
+//                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(starsArray.length()), Toast.LENGTH_SHORT);
+//                    toast.show();
                 }
                 else {
                     Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no starred repos!", Snackbar.LENGTH_SHORT)

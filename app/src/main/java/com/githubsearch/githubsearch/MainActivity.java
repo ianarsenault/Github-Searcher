@@ -1,3 +1,4 @@
+
 package com.githubsearch.githubsearch;
 
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.R.attr.type;
 import static android.R.id.message;
@@ -85,6 +88,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//    // TODO Update type params according to your needs.
+//    public class MyAsyncTask extends AsyncTask<Void,Void,Void> {
+//        // This instance should be created before creating your async tasks.
+//        // Its start count should be equal to the number of async tasks that you will spawn.
+//        // It is important that the same AtomicInteger is supplied to all the spawned async tasks such that they share the same work counter.
+//        private final AtomicInteger workCounter;
+//
+//        public MyAsyncTask(AtomicInteger workCounter) {
+//            this.workCounter = workCounter;
+//        }
+//
+//        // TODO implement doInBackground
+//
+//        @Override
+//        public void onPostExecute(Void result) {
+//            // Job is done, decrement the work counter.
+//            int tasksLeft = this.workCounter.decrementAndGet();
+//            // If the count has reached zero, all async tasks have finished.
+//            if (tasksLeft == 0) {
+//                // Make activity aware by sending a broadcast.
+//                LocalBroadcastManager mgr = LocalBroadcastManager.getInstance(this.ctx);
+//                mgr.sendBroadcast(new Intent("all_tasks_have_finished"));
+//            }
+//        }
+//    }
+
     private class RetrieveProfileInfo extends AsyncTask<String, Void, JSONObject[]> {
 
         private Exception exception;
@@ -128,22 +157,6 @@ public class MainActivity extends AppCompatActivity {
 
             // Set progress bar invisible
             progressBar.setVisibility(View.INVISIBLE);
-
-
-//            int maxLogSize = 2000;
-//            for (int i = 0; i <= githubRepos.toString().length() / maxLogSize; i++) {
-//                int start = i * maxLogSize;
-//                int end = (i + 1) * maxLogSize;
-//                end = end > githubRepos.toString().length() ? githubRepos.toString().length() : end;
-//                android.util.Log.d("REPOS RESPONSE", githubRepos.toString().substring(start, end));
-//            }
-//
-//            for (int i = 0; i <= githubStars.toString().length() / maxLogSize; i++) {
-//                int start = i * maxLogSize;
-//                int end = (i + 1) * maxLogSize;
-//                end = end > githubStars.toString().length() ? githubStars.toString().length() : end;
-//                android.util.Log.d("STARS RESPONSE", githubStars.toString().substring(start, end));
-//            }
 
 
             Log.i("INFO", response);
