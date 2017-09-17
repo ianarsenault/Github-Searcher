@@ -217,16 +217,9 @@ public class Profile extends AppCompatActivity {
         // Make call to API for Repos and Stars
         new RetrieveRepoAndStarInfo().execute(profileRepoUrl, profileStarsUrl);
 
-//        Toast.makeText(this, profileRepoUrl + " " + profileStarsUrl, Toast.LENGTH_LONG).show();
 
         try {
             JSONObject profileObj = new JSONObject(profileJsonString);
-
-//            Log.i("Repo size: ", String.valueOf(repoArray.length()));
-//            Log.i("Stars size: ", String.valueOf(starsArray.length()));
-
-//            Log.i("Repo Array", repoArray.toString());
-
             profileUrl = profileObj.getString(KEY_HTML_URL);
             avatarUrl = profileObj.getString(KEY_AVATAR);
             login = profileObj.getString(KEY_LOGIN);
@@ -255,7 +248,12 @@ public class Profile extends AppCompatActivity {
 
         username.setText("@" + login);
         name.setText(fullname);
-        location.setText(lction);
+        if (lction.equals("null")) {
+            location.setText("Somewhere");
+        } else {
+            location.setText(lction);
+        }
+
         followers.setText("Followers: " + String.valueOf(gFollowers));
         following.setText("Following: " + String.valueOf(gFollowing));
         btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
@@ -320,16 +318,13 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (starsArray.length() > 0) {
-
                     // TODO SEND starsArray over through INTENT new Fragment OR Activity
                     Intent i = new Intent(getApplicationContext(), com.githubsearch.githubsearch.StarsActivity.class);
                     i.putExtra("profileimage", avatarUrl);
                     i.putExtra("userid", login);
                     i.putExtra("starsarray", starsArray.toString());
                     startActivityForResult(i, REQUEST_CODE);
-//
-//                    Toast toast = Toast.makeText(getApplicationContext(), "There are " + String.valueOf(starsArray.length()), Toast.LENGTH_SHORT);
-//                    toast.show();
+
                 }
                 else {
                     Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no starred repos!", Snackbar.LENGTH_SHORT)
@@ -369,10 +364,13 @@ public class Profile extends AppCompatActivity {
                             tv.setGravity(Gravity.CENTER_HORIZONTAL);
 
                         } else {
+                            Intent intent = new Intent(Intent.ACTION_SENDTO);
+                            intent.setData(Uri.parse("mailto:"));
+                            intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { gEmail });
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "My subject");
 
-                            // TODO OPEN UP USER EMAIL APPLICATION => PASS EMAIL
-                            Toast emailToast = Toast.makeText(getApplicationContext(), gEmail, Toast.LENGTH_SHORT);
-                            emailToast.show();
+                            startActivity(Intent.createChooser(intent, "Email via..."));
+
                         }
 
                         break;

@@ -8,18 +8,15 @@
     tools:context="com.githubsearch.githubsearch.StarsActivity"
     tools:showIn="@layout/activity_stars">
 
-
-    <!--android:background="#b4b4b4"-->
-
     <ImageView
         android:id="@+id/imageViewProfilePicture"
-        android:layout_width="134dp"
-        android:layout_height="109dp"
+        android:layout_width="146dp"
+        android:layout_height="121dp"
         app:srcCompat="@drawable/profilepicture"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="66dp"
-        android:layout_marginLeft="-28dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="3dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
@@ -27,16 +24,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        app:layout_constraintLeft_toRightOf="@+id/imageViewProfilePicture"
-        android:layout_marginLeft="22dp"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="44dp"
-        android:layout_marginStart="22dp" />
+        android:layout_marginTop="83dp"
+        android:layout_marginStart="22dp"
+        android:fontFamily="@string/font_family_medium"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewProfilePicture"
+        android:layout_marginLeft="22dp" />
 
     <ListView
         android:id="@+id/listViewRepo"
-        android:layout_width="328dp"
-        android:layout_height="350dp"
+        android:layout_width="326dp"
+        android:layout_height="294dp"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="8dp"
@@ -44,15 +44,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="157dp" />
+        tools:layout_editor_absoluteY="213dp"
+        tools:layout_editor_absoluteX="19dp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="21dp"
         app:srcCompat="@drawable/gitcommit"
-        tools:layout_editor_absoluteY="122dp"
-        tools:layout_editor_absoluteX="66dp" />
-
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfilePicture"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
