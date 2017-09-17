@@ -1,6 +1,8 @@
 package com.githubsearch.githubsearch;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.provider.Settings.System.DATE_FORMAT;
+import static com.githubsearch.githubsearch.R.layout.item_listview_row;
 
 
 public class ReposActivity extends AppCompatActivity {
@@ -114,44 +118,31 @@ public class ReposActivity extends AppCompatActivity {
         }
 
         RepoInformationAdapter adapter = new RepoInformationAdapter(getApplicationContext(),
-                R.layout.item_listview_row, myRepoList);
+                item_listview_row, myRepoList);
 
         ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
         repoResults.setAdapter(adapter);
 
+        repoResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Get each items repo url here on click
+                final TextView tv = (TextView) view.findViewById(R.id.tvRepoUrl);
+                String repositoryURL = tv.getText().toString();
+                //Toast.makeText(getApplicationContext(), repositoryURL, Toast.LENGTH_LONG).show();
 
-
-//        ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.item_listview_row), ;
-//
-//
-//        for (int i = 0; i < repoArray.length(); i++) {
-//            try {
-//                JSONObject json_repo = repoArray.getJSONObject(i);
-//                repoName = json_repo.getString(KEY_NAME);
-//                repoFullName = json_repo.getString(KEY_FULLNAME);
-//                repoDescription = json_repo.getString(KEY_DESCRIPTION);
-//                repoUrl = json_repo.getString(KEY_REPO_URL);
-//                lastRepoUpdate = json_repo.getString(KEY_LAST_UPDATE);
-//                repoForksCount = json_repo.getInt(KEY_FORKS_COUNT);
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//            // TODO: CHECK FOR NULL VALUES - DISPLAY ACCORDINGLY
-//
-//            adapter.add(repoFullName + "\n"
-//                    + repoDescription + "\n"
-//                    + lastRepoUpdate + "\n"
-//                    + String.valueOf(repoForksCount));
-//
-//
-//        }
-//
-//        repoResults.setAdapter(adapter);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(repositoryURL));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.android.chrome");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    // Chrome browser presumably not installed so allow user to choose instead
+                    intent.setPackage(null);
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 

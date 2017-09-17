@@ -1,6 +1,8 @@
 package com.githubsearch.githubsearch;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -111,6 +115,27 @@ public class StarsActivity extends AppCompatActivity {
 
         ListView repoResults = (ListView) findViewById(R.id.listViewRepo);
         repoResults.setAdapter(adapter);
+
+        repoResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Get each items repo url here on click
+                final TextView tv = (TextView) view.findViewById(R.id.tvRepoUrl);
+                String repositoryURL = tv.getText().toString();
+                //Toast.makeText(getApplicationContext(), repositoryURL, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(repositoryURL));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.android.chrome");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    // Chrome browser presumably not installed so allow user to choose instead
+                    intent.setPackage(null);
+                    startActivity(intent);
+                }
+            }
+        });
 
 
     }
