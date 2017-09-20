@@ -50,6 +50,8 @@ public class Profile extends AppCompatActivity {
     private TextView followers;
     private Button btnRepos;
     private Button btnStars;
+    private FloatingActionButton fab;
+    private TextView bio;
 
     private FloatingActionButton chromeBtn;
 
@@ -61,6 +63,7 @@ public class Profile extends AppCompatActivity {
     private static final String KEY_FOLLOWING = "following";
     private static final String KEY_FOLLOWERS = "followers";
     private static final String KEY_NUM_OF_REPOS = "public_repos";
+    private static final String KEY_BIO = "bio";
     private static final String KEY_HTML_URL = "html_url";
     private static final String KEY_STARRED_URL = "starred_url";
     private static final String KEY_REPOS_URL = "repos_url";
@@ -76,6 +79,7 @@ public class Profile extends AppCompatActivity {
     private int gFollowing;
     private String gEmail;
     private int gNumberOfRepos;
+    private String gBio;
 
     JSONArray repoArray;
     JSONArray starsArray;
@@ -98,6 +102,7 @@ public class Profile extends AppCompatActivity {
         followers = (TextView) findViewById(R.id.textViewFollowers);
         btnRepos = (Button) findViewById(R.id.buttonRepos);
         btnStars = (Button) findViewById(R.id.buttonStars);
+        bio = (TextView) findViewById(R.id.textViewBio);
 
         btnRepos.setEnabled(false);
         btnStars.setEnabled(false);
@@ -122,12 +127,12 @@ public class Profile extends AppCompatActivity {
             gFollowing = profileObj.getInt(KEY_FOLLOWING);
             gEmail = profileObj.getString(KEY_EMAIL);
             gNumberOfRepos = profileObj.getInt(KEY_NUM_OF_REPOS);
+            gBio = profileObj.getString(KEY_BIO);
 
 
         } catch (JSONException e) {
             Log.e("My App: ", "unexpected JSON Exception", e);
         }
-
 
 
         // DISPLAY DATA
@@ -150,21 +155,32 @@ public class Profile extends AppCompatActivity {
         followers.setText("Followers: " + String.valueOf(gFollowers));
         following.setText("Following: " + String.valueOf(gFollowing));
         btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
+        bio.setText("\"" + gBio + "\"");
+        fab = (FloatingActionButton) findViewById(R.id.fabProfileEmail);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabChrome);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String urlString = "http://www.github.com"; // test url string
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(profileUrl));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setPackage("com.android.chrome");
-                try {
-                    startActivity(intent);
-                } catch (ActivityNotFoundException ex) {
-                    // Chrome browser presumably not installed so allow user to choose instead
-                    intent.setPackage(null);
-                    startActivity(intent);
+
+                if (gEmail.equals("null")) {
+                    Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "No email for @" + login, Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    snackbar.show();
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                    TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                    // FOR PURPOSE OF DEMO - NEED AUTH TO ACCESS PUBLIC EMAIL OF GITHUB USERS
+
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:"));
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{gEmail});
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "My subject");
+
+                    startActivity(Intent.createChooser(intent, "Email via..."));
+
                 }
             }
         });
@@ -189,8 +205,7 @@ public class Profile extends AppCompatActivity {
                     i.putExtra("reposarray", repoArray.toString());
                     startActivityForResult(i, REQUEST_CODE);
 
-                }
-                else {
+                } else {
                     Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no repos!", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null);
                     snackbar.show();
@@ -214,8 +229,7 @@ public class Profile extends AppCompatActivity {
                     i.putExtra("starsarray", starsArray.toString());
                     startActivityForResult(i, REQUEST_CODE);
 
-                }
-                else {
+                } else {
                     Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Looks like this user has no starred repos!", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null);
                     snackbar.show();
@@ -229,51 +243,51 @@ public class Profile extends AppCompatActivity {
         });
 
 
-        ((ImageButton) findViewById(R.id.imageButtonEmail)).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // TODO: ADD BACKGROUND/BORDER COLOR TO IMAGE
-//                        Toast toast = Toast.makeText(getApplicationContext(), "EMAIL BUTTON PRESSED" , Toast.LENGTH_SHORT);
-//                        toast.show();
-//                        ImageButton imgView = (ImageButton ) view;
-//                        imgView.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-//                        view.invalidate();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        if (gEmail.equals("null")) {
-                            Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "No email for @" + login, Snackbar.LENGTH_SHORT)
-                                    .setAction("Action", null);
-                            snackbar.show();
-                            View snackbarView = snackbar.getView();
-                            snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-                            TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                        } else {
-                            Intent intent = new Intent(Intent.ACTION_SENDTO);
-                            intent.setData(Uri.parse("mailto:"));
-                            intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { gEmail });
-                            intent.putExtra(Intent.EXTRA_SUBJECT, "My subject");
-
-                            startActivity(Intent.createChooser(intent, "Email via..."));
-
-                        }
-
-                        break;
-
-                    case MotionEvent.ACTION_CANCEL:
-                        ImageButton imgView = (ImageButton) view;
-                        imgView.getBackground().clearColorFilter();
-                        imgView.invalidate();
-                        break;
-
-                }
-                return false;
-            }
-        });
+//        ((ImageButton) findViewById(R.id.imageButtonEmail)).setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                switch (motionEvent.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        // TODO: ADD BACKGROUND/BORDER COLOR TO IMAGE
+////                        Toast toast = Toast.makeText(getApplicationContext(), "EMAIL BUTTON PRESSED" , Toast.LENGTH_SHORT);
+////                        toast.show();
+////                        ImageButton imgView = (ImageButton ) view;
+////                        imgView.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+////                        view.invalidate();
+//                        break;
+//
+//                    case MotionEvent.ACTION_UP:
+//                        if (gEmail.equals("null")) {
+//                            Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "No email for @" + login, Snackbar.LENGTH_SHORT)
+//                                    .setAction("Action", null);
+//                            snackbar.show();
+//                            View snackbarView = snackbar.getView();
+//                            snackbarView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+//                            TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+//                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//                        } else {
+//                            Intent intent = new Intent(Intent.ACTION_SENDTO);
+//                            intent.setData(Uri.parse("mailto:"));
+//                            intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { gEmail });
+//                            intent.putExtra(Intent.EXTRA_SUBJECT, "My subject");
+//
+//                            startActivity(Intent.createChooser(intent, "Email via..."));
+//
+//                        }
+//
+//                        break;
+//
+//                    case MotionEvent.ACTION_CANCEL:
+//                        ImageButton imgView = (ImageButton) view;
+//                        imgView.getBackground().clearColorFilter();
+//                        imgView.invalidate();
+//                        break;
+//
+//                }
+//                return false;
+//            }
+//        });
 
 
     }
