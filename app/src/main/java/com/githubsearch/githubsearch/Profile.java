@@ -26,7 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.util.Random;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -36,6 +36,8 @@ import org.w3c.dom.Text;
 
 import static android.R.attr.drawable;
 import static android.R.attr.height;
+import static android.R.attr.max;
+import static android.R.attr.min;
 import static android.R.attr.width;
 import static android.os.Build.VERSION_CODES.O;
 
@@ -155,7 +157,13 @@ public class Profile extends AppCompatActivity {
         followers.setText("Followers: " + String.valueOf(gFollowers));
         following.setText("Following: " + String.valueOf(gFollowing));
         btnRepos.setText("Repos - " + String.valueOf(gNumberOfRepos));
-        bio.setText("\"" + gBio + "\"");
+        if (gBio.equals("null")) {
+            bio.setText("\"Remains a mystery\"");
+        }
+        else {
+            bio.setText("\"" + gBio + "\"");
+        }
+
         fab = (FloatingActionButton) findViewById(R.id.fabProfileEmail);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +171,15 @@ public class Profile extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (gEmail.equals("null")) {
-                    Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "No email for @" + login, Snackbar.LENGTH_SHORT)
+                    // FOR PURPOSE OF DEMO JUST OPEN EMAIL INTENT
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:"));
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"githubuser@gmail.com"});
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "My subject");
+
+                    startActivity(Intent.createChooser(intent, "Email via..."));
+
+                    Snackbar snackbar = Snackbar.make(Profile.this.findViewById(android.R.id.content), "Opening email for @" + login, Snackbar.LENGTH_SHORT)
                             .setAction("Action", null);
                     snackbar.show();
                     View snackbarView = snackbar.getView();
